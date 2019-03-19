@@ -1,0 +1,55 @@
+{
+  "name": "appointments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node --no-babelrc --presets @babel/preset-env ./src/server/index.js",
+    "build": "npm run clear && cross-env NODE_ENV=production webpack --mode production",
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cross-env NODE_ENV=development webpack --watch --mode development",
+    "dev:server": "cross-env NODE_ENV=development nodemon --watch ./src/server --exec babel-node --no-babelrc --presets @babel/preset-env ./src/server/index.js",
+    "clear": "rimraf public",
+    "test": "jest"
+  },
+  "keywords": [
+    "health",
+    "appointment"
+  ],
+  "author": "Pedro Alves",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "@sentry/browser": "^4.6.4",
+    "apollo-client": "^2.5.1",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "mongoose": "^5.4.19",
+    "react": "^16.8.4",
+    "react-apollo": "^2.5.2",
+    "react-dom": "^16.8.4",
+    "react-redux": "^6.0.1",
+    "react-router": "^4.4.0",
+    "redux": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "^4.6.0",
+    "jest": "^24.5.0",
+    "nodemon": "^1.18.10",
+    "rimraf": "^2.6.3",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}
