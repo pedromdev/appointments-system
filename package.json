@@ -10,7 +10,7 @@
     "dev:client": "cross-env NODE_ENV=development webpack --watch --mode development",
     "dev:server": "cross-env NODE_ENV=development nodemon --watch ./src/server --exec babel-node --no-babelrc --presets @babel/preset-env ./src/server/index.js",
     "clear": "rimraf public",
-    "test": "jest"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "keywords": [
     "health",
@@ -46,6 +46,7 @@
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.6.0",
     "jest": "^24.5.0",
+    "mongodb-memory-server": "^4.2.1",
     "nodemon": "^1.18.10",
     "rimraf": "^2.6.3",
     "url-loader": "^1.1.2",
