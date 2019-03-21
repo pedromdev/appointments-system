@@ -5,15 +5,17 @@ let mongod;
 if (process.env.NODE_ENV === 'test') {
   mongod = new MongoMemoryServer({
     autoStart: false,
-    // debug: true
+    debug: true
   });
 }
 
 export default {
-  mongod,
+  getMongoD() {
+    return mongod;
+  },
   async getConnectionUri() {
     if (process.env.NODE_ENV === 'test') {
-      return await mongod.getConnectionString('appointment');
+      return await mongod.getConnectionString();
     } else {
       return process.env.MONGODB_URI;
     }
