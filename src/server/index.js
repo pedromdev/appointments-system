@@ -1,1 +1,1 @@
-import mongoose from 'mongoose';
+import './connections/mongoose';
