@@ -1,15 +1,21 @@
 import MongoMemoryServer from 'mongodb-memory-server';
 
-let mongoMemoryServer;
+let mongod;
 
 if (process.env.NODE_ENV === 'test') {
-    mongoMemoryServer = new MongoMemoryServer();
+  mongod = new MongoMemoryServer({
+    autoStart: false,
+    // debug: true
+  });
 }
 
-export const getConnectionUri = async () => {
+export default {
+  mongod,
+  async getConnectionUri() {
     if (process.env.NODE_ENV === 'test') {
-        return await mongoMemoryServer.getConnectionString('appointment');
+      return await mongod.getConnectionString('appointment');
     } else {
-        return process.env.MONGODB_URI;
+      return process.env.MONGODB_URI;
     }
-};
+  }
+}
