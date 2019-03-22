@@ -4,7 +4,7 @@ let mongod;
 
 if (process.env.NODE_ENV === 'test') {
   mongod = new MongoMemoryServer({
-    autoStart: false,
+    autoStart: true,
     // debug: true
   });
 }

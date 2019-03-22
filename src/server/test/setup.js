@@ -4,16 +4,17 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const globalConfigPath = path.join(__dirname, 'globalConfig.json');
 
 const mongod = new MongoMemoryServer({
-  autoStart: false
+  autoStart: true,
+  debug: true
 });
 
 module.exports = async () => {
   if (!mongod.isRunning) {
-    await mongod.start();
+    // await mongod.start();
   }
 
   const mongoConfig = {
-    mongoDBName: 'jest',
+    mongoDBName: 'appointment',
     mongoUri: await mongod.getConnectionString(),
   };
 
