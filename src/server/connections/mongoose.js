@@ -3,8 +3,8 @@ import mongodb from '../configurations/mongodb';
 
 const mongooseOpts = {
   autoReconnect: false,
-  // reconnectTries: Number.MAX_VALUE,
-  // reconnectInterval: 1000,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000,
   useNewUrlParser: true,
   dbName: 'appointment'
 };
@@ -12,10 +12,7 @@ const mongooseOpts = {
 export default {
   async open() {
     const uri = await mongodb.getConnectionUri('appointment');
-    console.log('Uri retrieved');
-    console.log(uri);
-    mongoose.connect(uri, mongooseOpts);
-    // mongoose.on('open', () => console.log('Openned connection'))
+    await mongoose.connect(uri, mongooseOpts);
   },
   async close() {
     mongoose.connection.close();

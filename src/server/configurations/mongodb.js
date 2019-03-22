@@ -4,8 +4,7 @@ let mongod;
 
 if (process.env.NODE_ENV === 'test') {
   mongod = new MongoMemoryServer({
-    autoStart: false,
-    // debug: true
+    autoStart: false
   });
 }
 
@@ -15,7 +14,6 @@ export default {
   },
   async getConnectionUri() {
     if (process.env.NODE_ENV === 'test') {
-      console.log('Getting uri..');
       return await mongod.getConnectionString();
     } else {
       return process.env.MONGODB_URI;
