@@ -1,7 +1,5 @@
-const MongoDBConfiguration = require('../configurations/mongodb').default;
-
-const mongod = MongoDBConfiguration.getMongoD();
+const MongooseConnection = require('../connections/mongoose').default;
 
 module.exports = async () => {
-  await mongod.stop();
+  await MongooseConnection.close();
 };

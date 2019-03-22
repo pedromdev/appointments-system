@@ -2,22 +2,23 @@ import mongoose from 'mongoose';
 import mongodb from '../configurations/mongodb';
 
 const mongooseOpts = {
-  // autoReconnect: true,
+  autoReconnect: false,
   // reconnectTries: Number.MAX_VALUE,
   // reconnectInterval: 1000,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  dbName: 'appointment'
 };
-const mongooseConnection = mongoose.createConnection();
 
 export default {
   async open() {
-    const uri = await mongodb.getConnectionUri();
-    mongooseConnection.openUri(uri, mongooseOpts);
-    mongooseConnection.once('open', () => {
-      console.log(`MongoDB successfully connected to ${uri}`);
-    });
+    const uri = await mongodb.getConnectionUri('appointment');
+    console.log('Uri retrieved');
+    console.log(uri);
+    mongoose.connect(uri, mongooseOpts);
+    // mongoose.on('open', () => console.log('Openned connection'))
   },
   async close() {
     mongoose.connection.close();
+    await mongodb.getMongoD().stop();
   }
 };
