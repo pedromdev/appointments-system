@@ -10,8 +10,12 @@
     "dev:client": "cross-env NODE_ENV=development webpack --watch --mode development",
     "dev:server": "cross-env NODE_ENV=test nodemon --watch ./src/server --exec babel-node --no-babelrc --presets @babel/preset-env ./src/server/index.js",
     "clear": "rimraf public",
+    "test": "npm run test:server && npm run test:client",
+    "test:watch": "concurrently --kill-others \"npm run test:server\" \"npm run test:client\"",
     "test:client": "cross-env NODE_ENV=test jest --config=./jest.client.config.js",
-    "test:server": "cross-env NODE_ENV=test jest --config=./jest.server.config.js --detectOpenHandles"
+    "test:server": "cross-env NODE_ENV=test jest --config=./jest.server.config.js",
+    "test:watch:client": "cross-env NODE_ENV=test jest --config=./jest.client.config.js --watchAll",
+    "test:watch:server": "cross-env NODE_ENV=test jest --config=./jest.server.config.js --watchAll"
   },
   "keywords": [
     "health",
@@ -26,18 +30,22 @@
     "@sentry/browser": "^4.6.4",
     "apollo-client": "^2.5.1",
     "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.19",
+    "mongoose-unique-validator": "^2.0.2",
     "react": "^16.8.4",
     "react-apollo": "^2.5.2",
     "react-dom": "^16.8.4",
     "react-redux": "^6.0.1",
     "react-router": "^4.4.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",

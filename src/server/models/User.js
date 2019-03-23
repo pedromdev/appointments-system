@@ -1,14 +1,23 @@
-import { Schema, model } from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {isEmail} from 'validator';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Nome é obrigatório']
+    required: [true, 'É preciso informar o nome'],
+    minlength: [3, 'O nome precisa ter pelo menos 3 caracteres'],
+    trim: true,
   },
   email: {
     type: String,
-    required: [true, 'E-mail é obrigatório'],
+    required: [true, 'É preciso informar o e-mail'],
     unique: [true, 'O e-mail informado já está cadastrado'],
+    trim: true,
+    validate: {
+      validator: isEmail,
+      message: '{VALUE} não é um e-mail válido'
+    }
   },
   email_verified: {
     type: Boolean,
@@ -16,8 +25,17 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'É preciso informar a senha'],
+    minlength: [6, 'A senha deve ter pelo menos 6 caracteres'],
+  },
+  medical_specialty: {
+    type: String,
+    trim: true,
   }
+});
+
+UserSchema.plugin(uniqueValidator, {
+  message: '{VALUE} já está registrado'
 });
 
 export default model('User', UserSchema);
