@@ -1,5 +1,6 @@
 const User = require('../../models/User').default;
 const MongooseConnection = require('../../connections/mongoose').default;
+const Jwt = require('../../configurations/jwt').default;
 const bcrypt = require('bcryptjs');
 
 jest.setTimeout(15000);
@@ -116,6 +117,26 @@ describe('User model', () => {
       try {
         await user.save();
         expect(bcrypt.compareSync(exampleUser.password, user.password)).toBeTruthy();
+      } catch (e) {
+        fail(e);
+      }
+    });
+
+  });
+
+  describe('Methods', () => {
+
+    it('should return a valid JSON Web Token', async() => {
+      let user = new User(exampleUser);
+
+      try {
+        await user.save();
+
+        let token = user.getToken();
+        let decodedToken = Jwt.decode(token);
+
+        expect(decodedToken.sub).toEqual(user._id.toHexString());
+        expect(decodedToken.scope).toEqual('auth');
       } catch (e) {
         fail(e);
       }

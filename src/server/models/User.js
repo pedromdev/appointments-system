@@ -3,6 +3,8 @@ import {isEmail} from 'validator';
 import uniqueValidator from 'mongoose-unique-validator';
 import bcrypt from 'bcryptjs';
 
+import Jwt from '../configurations/jwt';
+
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -41,6 +43,13 @@ UserSchema.pre('save', function (next) {
   let salt = bcrypt.genSaltSync(10);
   this.password = bcrypt.hashSync(this.password, salt);
   next();
-})
+});
+
+UserSchema.methods.getToken = function (scope = 'auth') {
+  return Jwt.sign({
+    sub: this._id.toHexString(),
+    scope
+  });
+};
 
 export default model('User', UserSchema);
