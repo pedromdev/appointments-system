@@ -1,6 +1,7 @@
 import {model, Schema} from 'mongoose';
 import {isEmail} from 'validator';
 import uniqueValidator from 'mongoose-unique-validator';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema({
   name: {
@@ -37,5 +38,13 @@ const UserSchema = new Schema({
 UserSchema.plugin(uniqueValidator, {
   message: '{VALUE} já está registrado'
 });
+
+UserSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next();
+
+  let salt = bcrypt.genSaltSync(10);
+  this.password = bcrypt.hashSync(this.password, salt);
+  next();
+})
 
 export default model('User', UserSchema);

@@ -1,7 +1,14 @@
 const User = require('../../models/User').default;
 const MongooseConnection = require('../../connections/mongoose').default;
+const bcrypt = require('bcryptjs');
 
 jest.setTimeout(15000);
+
+let exampleUser = {
+  name: 'abc',
+  email: 'example@gmail.com',
+  password: '123456'
+};
 
 describe('User model', () => {
 
@@ -11,6 +18,10 @@ describe('User model', () => {
 
   afterAll(async () => {
     await MongooseConnection.close();
+  });
+
+  beforeEach(async () => {
+    await User.deleteMany({});
   });
 
   describe('Validations', () => {
@@ -74,11 +85,7 @@ describe('User model', () => {
     });
 
     it('should returns an error when I try to save a user with an existing email', async () => {
-      let user = new User({
-        name: 'abc',
-        email: 'example@gmail.com',
-        password: '123456'
-      });
+      let user = new User(exampleUser);
       let user2 = new User({
         name: 'abc2',
         email: 'example@gmail.com',
@@ -94,6 +101,21 @@ describe('User model', () => {
         } catch (e) {
           expect(e.errors.email.message).toEqual('example@gmail.com já está registrado');
         }
+      } catch (e) {
+        fail(e);
+      }
+    });
+
+  });
+  
+  describe('Hooks', () => {
+    
+    it('should encrypt the password on pre save', async () => {
+      let user = new User(exampleUser);
+
+      try {
+        await user.save();
+        expect(bcrypt.compareSync(exampleUser.password, user.password)).toBeTruthy();
       } catch (e) {
         fail(e);
       }
