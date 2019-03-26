@@ -17,6 +17,9 @@ export default {
   },
   async close() {
     await mongoose.disconnect();
-    await mongodb.getMongoD().stop();
+
+    if (process.env.NODE_ENV === 'test') {
+      await mongodb.getMongoD().stop();
+    }
   }
 };
