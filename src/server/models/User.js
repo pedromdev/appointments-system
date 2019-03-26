@@ -29,10 +29,6 @@ const UserSchema = new Schema({
     required: [true, 'É preciso informar a senha'],
     minlength: [6, 'A senha deve ter pelo menos 6 caracteres'],
   },
-  medical_specialty: {
-    type: String,
-    trim: true,
-  }
 });
 
 UserSchema.plugin(uniqueValidator, {
