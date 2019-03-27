@@ -1,5 +1,7 @@
 import MongoMemoryServer from 'mongodb-memory-server';
 
+import logger from '../utils/logger';
+
 let mongod;
 
 if (process.env.NODE_ENV === 'test') {
@@ -15,7 +17,6 @@ export default {
   async getConnectionUri() {
     if (process.env.NODE_ENV === 'test') {
       if (!mongod.isRunning) {
-        console.log('Starting MongoDB Memory Server...');
         await mongod.start();
       }
       return await mongod.getConnectionString();

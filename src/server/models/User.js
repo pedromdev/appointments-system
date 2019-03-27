@@ -38,10 +38,11 @@ UserSchema.plugin(uniqueValidator, {
 });
 
 UserSchema.pre('save', function (next) {
-  if (!this.isModified('password')) return next();
+  if (this.isModified('password')) {
+    let salt = bcrypt.genSaltSync(10);
+    this.password = bcrypt.hashSync(this.password, salt);
+  }
 
-  let salt = bcrypt.genSaltSync(10);
-  this.password = bcrypt.hashSync(this.password, salt);
   next();
 });
 

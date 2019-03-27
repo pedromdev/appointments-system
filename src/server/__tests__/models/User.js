@@ -3,8 +3,6 @@ const MongooseConnection = require('../../connections/mongoose').default;
 const Jwt = require('../../configurations/jwt').default;
 const bcrypt = require('bcryptjs');
 
-jest.setTimeout(15000);
-
 let exampleUser = {
   name: 'abc',
   email: 'example@gmail.com',
@@ -21,13 +19,13 @@ describe('User model', () => {
     await MongooseConnection.close();
   });
 
-  beforeEach(async () => {
+  afterEach(async () => {
     await User.deleteMany({});
   });
 
   describe('Validations', () => {
 
-    it('should returns an error when I try to save a user without required fields', async () => {
+    it('should return an error when I try to save a user without required fields', async () => {
       let user = new User();
 
       try {
@@ -40,7 +38,7 @@ describe('User model', () => {
       }
     });
 
-    it('should returns an error when I try to save a user with a name with less than 3 characters', async () => {
+    it('should return an error when I try to save a user with a name with less than 3 characters', async () => {
       let user = new User({
         name: 'ab',
         email: 'example@gmail.com',
@@ -55,7 +53,7 @@ describe('User model', () => {
       }
     });
 
-    it('should returns an error when I try to save a user with a password with less than 6 characters', async () => {
+    it('should return an error when I try to save a user with a password with less than 6 characters', async () => {
       let user = new User({
         name: 'abc',
         email: 'example@gmail.com',
@@ -70,7 +68,7 @@ describe('User model', () => {
       }
     });
 
-    it('should returns an error when I try to save a user with an invalid email', async () => {
+    it('should return an error when I try to save a user with an invalid email', async () => {
       let user = new User({
         name: 'abc',
         email: 'example',
@@ -85,7 +83,7 @@ describe('User model', () => {
       }
     });
 
-    it('should returns an error when I try to save a user with an existing email', async () => {
+    it('should return an error when I try to save a user with an existing email', async () => {
       let user = new User(exampleUser);
       let user2 = new User({
         name: 'abc2',
