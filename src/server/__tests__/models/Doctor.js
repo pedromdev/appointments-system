@@ -16,10 +16,6 @@ describe('Doctor model', () => {
     await MongooseConnection.close();
   });
 
-  afterEach(async () => {
-    await Doctor.deleteMany({});
-  });
-
   describe('Validations', () => {
 
     it('should return an error when I try to save a doctor without required fields', async () => {
@@ -64,6 +60,8 @@ describe('Doctor model', () => {
         fail(new Error('Doctor saved'));
       } catch (e) {
         expect(e.errors._user_id.message).toEqual('2530e03eecbb9aeabad86644 já está registrado como especialista');
+      } finally {
+        await Doctor.deleteMany({});
       }
     });
 
@@ -80,6 +78,7 @@ describe('Doctor model', () => {
         password: '123456'
       });
 
+      await Doctor.deleteMany({});
       await user.save();
     });
 

@@ -19,10 +19,6 @@ describe('User model', () => {
     await MongooseConnection.close();
   });
 
-  afterEach(async () => {
-    await User.deleteMany({});
-  });
-
   describe('Validations', () => {
 
     it('should return an error when I try to save a user without required fields', async () => {
@@ -102,13 +98,19 @@ describe('User model', () => {
         }
       } catch (e) {
         fail(e);
+      } finally {
+        await User.deleteMany({});
       }
     });
 
   });
   
   describe('Hooks', () => {
-    
+
+    beforeEach(async () => {
+      await User.deleteMany({});
+    });
+
     it('should encrypt the password on pre save', async () => {
       let user = new User(exampleUser);
 
@@ -123,6 +125,10 @@ describe('User model', () => {
   });
 
   describe('Methods', () => {
+
+    beforeEach(async () => {
+      await User.deleteMany({});
+    });
 
     it('should return a valid JSON Web Token', async() => {
       let user = new User(exampleUser);
