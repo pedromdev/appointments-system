@@ -25,6 +25,17 @@ const ScheduleSchema = new Schema({
   datetime: {
     type: Date,
     required: [true, 'É necessário informar o dia e o horário a serem marcados'],
+    validate: {
+      async validator(datetime) {
+        if (!this.isNew) return true;
+
+        let { _doctor_id } = this;
+        let schedule = await this.findOne({ datetime, _doctor_id });
+
+        return schedule === null || schedule.status !== 'CONFIRMED';
+      },
+      message: 'O horário informado já foi marcado'
+    }
   }
 });
 
