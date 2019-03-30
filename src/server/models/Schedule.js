@@ -1,5 +1,9 @@
 import {Schema, model} from 'mongoose';
 
+import User from './User';
+import Doctor from './Doctor';
+import Procedure from './Procedure';
+
 const ScheduleSchema = new Schema({
   _user_id: {
     type: Schema.Types.ObjectId,
@@ -30,13 +34,28 @@ const ScheduleSchema = new Schema({
         if (!this.isNew) return true;
 
         let { _doctor_id } = this;
-        let schedule = await this.findOne({ datetime, _doctor_id });
+        let schedule = await Schedule.findOne({ datetime, _doctor_id });
 
         return schedule === null || schedule.status !== 'CONFIRMED';
       },
       message: 'O horário informado já foi marcado'
     }
-  }
+  },
+  note: String
 });
 
-export default model('Schedule', ScheduleSchema);
+ScheduleSchema.methods.getUser = async function() {
+  return await User.findById(this._user_id);
+};
+
+ScheduleSchema.methods.getDoctor = async function() {
+  return await Doctor.findById(this._doctor_id);
+};
+
+ScheduleSchema.methods.getProcedure = async function() {
+  return await Procedure.findById(this._procedure_id);
+};
+
+const Schedule = model('Schedule', ScheduleSchema);
+
+export default Schedule;
