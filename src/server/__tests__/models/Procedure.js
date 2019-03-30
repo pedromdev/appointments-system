@@ -46,7 +46,7 @@ describe('Procedure model', () => {
 
   });
 
-  describe('Relationship', () => {
+  describe('Relationships', () => {
     let doctor;
 
     beforeEach(async () => {
