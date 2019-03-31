@@ -29,20 +29,18 @@ const ScheduleSchema = new Schema({
   datetime: {
     type: Date,
     required: [true, 'É necessário informar o dia e o horário a serem marcados'],
-    validate: {
-      async validator(datetime) {
-        if (!this.isNew) return true;
-
-        let { _doctor_id } = this;
-        let schedule = await Schedule.findOne({ datetime, _doctor_id });
-
-        return schedule === null || schedule.status !== 'CONFIRMED';
-      },
-      message: 'O horário informado já foi marcado'
-    }
   },
   note: String
 });
+
+ScheduleSchema.path('datetime').validate(async function(datetime) {
+  if (!this.isNew) return true;
+
+  let { _doctor_id } = this;
+  let schedule = await Schedule.findOne({ datetime, _doctor_id });
+
+  return schedule === null || schedule.status !== 'CONFIRMED';
+}, 'O horário informado já foi marcado');
 
 ScheduleSchema.methods.getUser = async function() {
   return await User.findById(this._user_id);

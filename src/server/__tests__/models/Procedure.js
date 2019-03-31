@@ -27,13 +27,15 @@ describe('Procedure model', () => {
       } catch (e) {
         expect(e.errors._doctor_id.message).toEqual('É necessário informar o responsável pelo procedimento');
         expect(e.errors.name.message).toEqual('É necessário informar o nome do procedimento');
+        expect(e.errors.duration.message).toEqual('É necessário informar a duração do procedimento');
       }
     });
 
     it('should return an error when I try to save a procedure with a name less than 3 characters', async () => {
       const procedure = new Procedure({
         _doctor_id: new ObjectID(),
-        name: 'ab'
+        name: 'ab',
+        duration: 60
       });
 
       try {
@@ -41,6 +43,21 @@ describe('Procedure model', () => {
         fail(new Error('Procedure saved'));
       } catch (e) {
         expect(e.errors.name.message).toEqual('O nome do procedimento deve ter pelo menos 3 caracteres');
+      }
+    });
+
+    it('should return an error when I try to save a procedure with a not integer duration', async () => {
+      const procedure = new Procedure({
+        _doctor_id: new ObjectID(),
+        name: 'abc',
+        duration: 60.5
+      });
+
+      try {
+        await procedure.save();
+        fail(new Error('Procedure saved'));
+      } catch (e) {
+        expect(e.errors.duration.message).toEqual('A duração do procedimento deve ser um número inteiro em minutos');
       }
     });
 
@@ -69,7 +86,8 @@ describe('Procedure model', () => {
     it('should retrieve a doctor from procedure model', async () => {
       let procedure = new Procedure({
         _doctor_id: doid,
-        name: 'xyz'
+        name: 'xyz',
+        duration: 60
       });
 
       try {

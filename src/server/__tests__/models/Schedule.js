@@ -116,7 +116,8 @@ describe('Schedule model', () => {
       let procedure = new Procedure({
         _id: poid,
         _doctor_id: doid,
-        name: 'xyz'
+        name: 'xyz',
+        duration: 60
       });
       let schedule = new Schedule(scheduleData);
 
