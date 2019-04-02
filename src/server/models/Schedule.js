@@ -42,6 +42,15 @@ ScheduleSchema.path('datetime').validate(async function(datetime) {
   return schedule === null || schedule.status !== 'CONFIRMED';
 }, 'O horário informado já foi marcado');
 
+ScheduleSchema.path('datetime').validate(async function(datetime) {
+  if (!this.isNew) return true;
+
+  let { _doctor_id } = this;
+  let schedule = await Schedule.findOne({ datetime, _doctor_id });
+
+  return schedule === null || schedule.status !== 'CONFIRMED';
+}, 'O horário informado não pode ser marcado, pois o especialista não poderá atender');
+
 ScheduleSchema.methods.getUser = async function() {
   return await User.findById(this._user_id);
 };

@@ -29,6 +29,7 @@ describe('Schedule model', () => {
   describe('Validations', () => {
 
     afterEach(async () => {
+      await Procedure.deleteMany({});
       await Schedule.deleteMany({});
     });
 
@@ -56,6 +57,33 @@ describe('Schedule model', () => {
         fail(new Error('Schedule saved'));
       } catch (e) {
         expect(e.errors.datetime.message).toEqual('O horário informado já foi marcado');
+      }
+    });
+
+    it('should return an error when I try to save a schedule at the moment of another', async () => {
+      let procedure = new Procedure({
+        _id: poid,
+        name: 'xyz',
+        _doctor_id: doid,
+        duration: 60
+      });
+      let schedule = new Schedule({
+        ...scheduleData,
+        status: 'CONFIRMED',
+        datetime: new Date('2030-02-12T12:00:00')
+      });
+      let schedule2 = new Schedule({
+        ...scheduleData,
+        datetime: new Date('2030-02-12T12:30:00')
+      });
+
+      try {
+        await procedure.save();
+        await schedule.save();
+        await schedule2.save();
+        fail(new Error('Schedule saved'));
+      } catch (e) {
+        expect(e.errors.datetime.message).toEqual('O horário informado não pode ser marcado, pois o especialista não poderá atender');
       }
     });
 
