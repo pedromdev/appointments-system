@@ -13,7 +13,7 @@ let scheduleData = {
   _user_id: uoid,
   _doctor_id: doid,
   _procedure_id: poid,
-  datetime: new Date()
+  datetime: new Date('2030-02-12T12:00:00')
 };
 
 describe('Schedule model', () => {
@@ -87,9 +87,40 @@ describe('Schedule model', () => {
       }
     });
 
+    it('should return an error when I try to save a schedule that conflits with another schedule in the future', async () => {
+      let procedure = new Procedure({
+        _id: poid,
+        name: 'xyz',
+        _doctor_id: doid,
+        duration: 60
+      });
+      let schedule = new Schedule({
+        ...scheduleData,
+        status: 'CONFIRMED',
+        datetime: new Date('2030-02-12T12:30:00')
+      });
+      let schedule2 = new Schedule({
+        ...scheduleData,
+        datetime: new Date('2030-02-12T12:00:00')
+      });
+
+      try {
+        await procedure.save();
+        await schedule.save();
+        await schedule2.save();
+        fail(new Error('Schedule saved'));
+      } catch (e) {
+        expect(e.errors.datetime.message).toEqual('O horário informado não pode ser marcado, pois o especialista não poderá atender');
+      }
+    });
+
   });
 
   describe('Relationships', () => {
+
+    beforeEach(async () => {
+      await Schedule.deleteMany({});
+    });
 
     afterEach(async () => {
       await Schedule.deleteMany({});

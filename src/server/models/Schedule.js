@@ -37,18 +37,40 @@ ScheduleSchema.path('datetime').validate(async function(datetime) {
   if (!this.isNew) return true;
 
   let { _doctor_id } = this;
-  let schedule = await Schedule.findOne({ datetime, _doctor_id });
+  let startDate = new Date(datetime.getTime() - 1000);
+  let endDate = new Date(datetime.getTime() + 1000);
+  let schedule = await Schedule.findOne({ datetime: { $gt: startDate, $lt: endDate }, _doctor_id });
 
-  return schedule === null || schedule.status !== 'CONFIRMED';
+  return schedule === null || schedule.status === 'CANCELLED';
 }, 'O horário informado já foi marcado');
 
 ScheduleSchema.path('datetime').validate(async function(datetime) {
-  if (!this.isNew) return true;
-
   let { _doctor_id } = this;
-  let schedule = await Schedule.findOne({ datetime, _doctor_id });
+  let schedule = await Schedule.findOne(
+    { datetime: { $lt: datetime }, _doctor_id },
+    null,
+    { sort: { datetime: -1 }}
+  );
 
-  return schedule === null || schedule.status !== 'CONFIRMED';
+  if (schedule === null) return true;
+
+  let scheduleProcedure = await schedule.getProcedure();
+  let lastScheduleEndTime = schedule.datetime.getTime() + scheduleProcedure.duration * 60 * 1000;
+
+  return lastScheduleEndTime < this.datetime.getTime();
+}, 'O horário informado não pode ser marcado, pois o especialista não poderá atender');
+
+ScheduleSchema.path('datetime').validate(async function(datetime) {
+  let { _doctor_id } = this;
+  let procedure = await this.getProcedure();
+  let scheduleStartTime = datetime.getTime() + 1000;
+  let scheduleEndTime = datetime.getTime() + procedure.duration * 60 * 1000;
+
+  let schedule = await Schedule.findOne(
+    { datetime: { $gt: new Date(scheduleStartTime), $lt: new Date(scheduleEndTime) }, _doctor_id }
+  );
+
+  return schedule === null;
 }, 'O horário informado não pode ser marcado, pois o especialista não poderá atender');
 
 ScheduleSchema.methods.getUser = async function() {
