@@ -27,6 +27,17 @@ describe('Schedule model', () => {
   });
 
   describe('Validations', () => {
+    let procedure;
+
+    beforeEach(async () => {
+      procedure = new Procedure({
+        _id: poid,
+        name: 'xyz',
+        _doctor_id: doid,
+        duration: 60
+      });
+      await procedure.save();
+    });
 
     afterEach(async () => {
       await Procedure.deleteMany({});
@@ -61,12 +72,6 @@ describe('Schedule model', () => {
     });
 
     it('should return an error when I try to save a schedule at the moment of another', async () => {
-      let procedure = new Procedure({
-        _id: poid,
-        name: 'xyz',
-        _doctor_id: doid,
-        duration: 60
-      });
       let schedule = new Schedule({
         ...scheduleData,
         status: 'CONFIRMED',
@@ -78,7 +83,6 @@ describe('Schedule model', () => {
       });
 
       try {
-        await procedure.save();
         await schedule.save();
         await schedule2.save();
         fail(new Error('Schedule saved'));
@@ -88,12 +92,6 @@ describe('Schedule model', () => {
     });
 
     it('should return an error when I try to save a schedule that conflits with another schedule in the future', async () => {
-      let procedure = new Procedure({
-        _id: poid,
-        name: 'xyz',
-        _doctor_id: doid,
-        duration: 60
-      });
       let schedule = new Schedule({
         ...scheduleData,
         status: 'CONFIRMED',
@@ -105,7 +103,6 @@ describe('Schedule model', () => {
       });
 
       try {
-        await procedure.save();
         await schedule.save();
         await schedule2.save();
         fail(new Error('Schedule saved'));
@@ -117,12 +114,20 @@ describe('Schedule model', () => {
   });
 
   describe('Relationships', () => {
+    let procedure;
 
     beforeEach(async () => {
-      await Schedule.deleteMany({});
+      procedure = new Procedure({
+      _id: poid,
+      name: 'xyz',
+      _doctor_id: doid,
+      duration: 60
+    });
+      await procedure.save();
     });
 
     afterEach(async () => {
+      await Procedure.deleteMany({});
       await Schedule.deleteMany({});
     });
 
@@ -172,16 +177,9 @@ describe('Schedule model', () => {
     });
 
     it('should retrieve a procedure from schedule model', async () => {
-      let procedure = new Procedure({
-        _id: poid,
-        _doctor_id: doid,
-        name: 'xyz',
-        duration: 60
-      });
       let schedule = new Schedule(scheduleData);
 
       try {
-        await procedure.save();
         await schedule.save();
 
         let scheduleProcedure = await schedule.getProcedure();

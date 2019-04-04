@@ -37,9 +37,7 @@ ScheduleSchema.path('datetime').validate(async function(datetime) {
   if (!this.isNew) return true;
 
   let { _doctor_id } = this;
-  let startDate = new Date(datetime.getTime() - 1000);
-  let endDate = new Date(datetime.getTime() + 1000);
-  let schedule = await Schedule.findOne({ datetime: { $gt: startDate, $lt: endDate }, _doctor_id });
+  let schedule = await Schedule.findOne({ datetime, _doctor_id });
 
   return schedule === null || schedule.status === 'CANCELLED';
 }, 'O horário informado já foi marcado');
@@ -67,7 +65,7 @@ ScheduleSchema.path('datetime').validate(async function(datetime) {
   let scheduleEndTime = datetime.getTime() + procedure.duration * 60 * 1000;
 
   let schedule = await Schedule.findOne(
-    { datetime: { $gt: new Date(scheduleStartTime), $lt: new Date(scheduleEndTime) }, _doctor_id }
+    { datetime: { $gte: new Date(scheduleStartTime), $lt: new Date(scheduleEndTime) }, _doctor_id }
   );
 
   return schedule === null;
