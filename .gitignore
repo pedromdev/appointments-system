@@ -63,3 +63,6 @@ typings/
 # IDEs
 .idea
 .vscode
+
+# Docker
+docker-compose.yml
