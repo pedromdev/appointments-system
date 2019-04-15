@@ -1,6 +1,7 @@
-import {GraphQLID, GraphQLObjectType, GraphQLString, GraphQLInt} from 'graphql';
+import {GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString, GraphQLList} from 'graphql';
 
 import DoctorType from './DoctorType';
+import Schedule from "../../models/Schedule";
 
 const ProcedureType = new GraphQLObjectType({
   name: 'ProcedureType',
@@ -12,6 +13,12 @@ const ProcedureType = new GraphQLObjectType({
       type: DoctorType,
       resolve(model) {
         return model.getDoctor();
+      }
+    },
+    schedules: {
+      type: new GraphQLList(require('./ScheduleType').default),
+      resolve(model) {
+        return Schedule.find({ _procedure_id: model._id });
       }
     }
   })

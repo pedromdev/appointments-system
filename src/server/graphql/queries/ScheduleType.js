@@ -1,5 +1,7 @@
 import {GraphQLID, GraphQLObjectType, GraphQLString} from 'graphql';
 
+import {DateScalarType} from '../scalar-types';
+
 import UserType from './UserType';
 import DoctorType from './DoctorType';
 import ProcedureType from './ProcedureType';
@@ -10,6 +12,7 @@ const ScheduleType = new GraphQLObjectType({
     id: { type: GraphQLID },
     status: { type: GraphQLString },
     note: { type: GraphQLString },
+    datetime: { type: DateScalarType },
     user: {
       type: UserType,
       resolve(model) {
