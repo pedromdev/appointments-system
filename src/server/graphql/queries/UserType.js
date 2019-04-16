@@ -1,7 +1,9 @@
-import {GraphQLID, GraphQLObjectType, GraphQLString, GraphQLList} from 'graphql';
+import {GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString} from 'graphql';
 
 import Doctor from "../../models/Doctor";
 import Schedule from "../../models/Schedule";
+import {schedule} from "./arguments";
+import {parseDateQuery} from "../../helpers";
 
 const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -16,8 +18,12 @@ const UserType = new GraphQLObjectType({
     },
     schedules: {
       type: new GraphQLList(require('./ScheduleType').default),
-      resolve(model) {
-        return Schedule.find({ _user_id: model._id });
+      args: {
+        ...schedule
+      },
+      resolve(model, query) {
+        query = parseDateQuery(query, 'datetime');
+        return Schedule.find({ _user_id: model._id, ...query });
       }
     }
   })

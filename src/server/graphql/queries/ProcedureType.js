@@ -2,6 +2,8 @@ import {GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString, GraphQLList} fr
 
 import DoctorType from './DoctorType';
 import Schedule from "../../models/Schedule";
+import {schedule} from "./arguments";
+import {parseDateQuery} from "../../helpers";
 
 const ProcedureType = new GraphQLObjectType({
   name: 'ProcedureType',
@@ -17,8 +19,12 @@ const ProcedureType = new GraphQLObjectType({
     },
     schedules: {
       type: new GraphQLList(require('./ScheduleType').default),
-      resolve(model) {
-        return Schedule.find({ _procedure_id: model._id });
+      args: {
+        ...schedule
+      },
+      resolve(model, query) {
+        query = parseDateQuery(query, 'datetime');
+        return Schedule.find({ _procedure_id: model._id, ...query });
       }
     }
   })

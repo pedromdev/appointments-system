@@ -18,11 +18,7 @@ import User from "../models/User";
 import Doctor from "../models/Doctor";
 import Procedure from "../models/Procedure";
 import Schedule from "../models/Schedule";
-
-const stringToRegexp = (object, props) => {
-  props.filter(prop => object[prop]).forEach(prop => object[prop] = new RegExp(object[prop], 'i'));
-  return object;
-};
+import {stringToRegexp} from "../helpers";
 
 const QueryType = new GraphQLObjectType({
   name: 'QueryType',

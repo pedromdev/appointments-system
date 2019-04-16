@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   server:
@@ -19,6 +19,12 @@ services:
   database:
     image: mongo:3.6-xenial
     restart: always
+    volumes:
+      - mongo-data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+
+volumes:
+  mongo-data:
+    external: true
