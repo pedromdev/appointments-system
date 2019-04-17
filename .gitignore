@@ -63,3 +63,7 @@ typings/
 # IDEs
 .idea
 .vscode
+
+# project folders
+build/
+public/
