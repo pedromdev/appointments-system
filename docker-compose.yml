@@ -9,7 +9,9 @@ services:
     volumes:
       - .:/app
     environment:
+      NODE_ENV: development
       MONGODB_URI: mongodb://root:root@database:27017/admin
+      JWT_SECRET_KEY_TOKEN: abc123
     entrypoint:
       - npm
       - run

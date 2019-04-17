@@ -3,13 +3,15 @@ import express from 'express';
 import expressGraphQL from 'express-graphql';
 import mongooseConnection from './connections/mongoose';
 
+import {authenticate} from './middlewares/auth';
+
 import schema from './graphql/Schema';
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
-app.use('/graphql', expressGraphQL({
+app.use('/graphql', authenticate, expressGraphQL({
   schema,
   graphiql: true
 }));

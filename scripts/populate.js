@@ -20,6 +20,8 @@ mongooseConnection.open().then(async () => {
 
   await doctor.save();
 
+  console.log(await User.find({}));
+
   mongooseConnection.close().then(() => {
     console.log('Database connection closed');
   })

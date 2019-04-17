@@ -19,10 +19,17 @@ import Doctor from "../models/Doctor";
 import Procedure from "../models/Procedure";
 import Schedule from "../models/Schedule";
 import {stringToRegexp} from "../helpers";
+import MeType from "./queries/MeType";
 
 const QueryType = new GraphQLObjectType({
   name: 'QueryType',
   fields: {
+    me: {
+      type: MeType,
+      resolve(model, query, req) {
+        return req.user;
+      }
+    },
     users: {
       type: new GraphQLList(UserType),
       args: { name: { type: GraphQLString } },
