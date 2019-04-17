@@ -7,7 +7,7 @@ mongooseConnection.open().then(async () => {
   let user = new User({
     name: 'Pedro Alves',
     email: 'pedro.alves@gmail.com',
-    password: '01323442',
+    password: '123456',
     email_verified: true
   });
 
