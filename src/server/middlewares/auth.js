@@ -17,13 +17,16 @@ export const authenticate = (req, res, next) => {
     });
   }
 
+  req.token = token;
+
+  if (token.sub === 'guest') return next();
+
   User.findById(token.sub).then((user) => {
     if (!user) {
       return Promise.reject();
     }
 
     req.user = user;
-    req.token = token;
     next();
   }).catch((e) => {
     res.status(401).send({

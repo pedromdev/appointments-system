@@ -60,4 +60,13 @@ api.post('/signin', (req, res) => {
     .catch(errorHandler(req, res));
 });
 
+api.get('/guest', (req, res) => {
+  res.send({
+    token: jwt.sign({
+      sub: 'guest',
+      scope: 'auth'
+    })
+  })
+});
+
 export default api;
