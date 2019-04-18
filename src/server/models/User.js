@@ -53,4 +53,8 @@ UserSchema.methods.getToken = function (scope = 'auth') {
   });
 };
 
+UserSchema.methods.checkPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
+
 export default model('User', UserSchema);
