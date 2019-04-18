@@ -1,5 +1,8 @@
 const path = require('path');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const VENDOR_LIBS = [
   '@sentry/browser',
@@ -17,29 +20,29 @@ const VENDOR_LIBS = [
 module.exports = {
   entry: {
     bundle: './src/client/index.js',
-    vendor: VENDOR_LIBS,
   },
   output: {
     path: path.join(__dirname, 'public'),
-    filename: '[name].js'
+    filename: 'js/[name].js?version=[contenthash]'
   },
   module: {
     rules: [
       {
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              "@babel/preset-env",
-              "@babel/preset-react"
-            ]
-          }
-        },
+        use: 'babel-loader',
         test: /\.js$/,
         exclude: /node_modules/
       },
       {
-        use: [ 'style-loader', 'css-loader' ],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+          'sass-loader',
+        ],
         test: /\.css$/
       },
       {
@@ -57,6 +60,19 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/client/index.html'
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      as(entry) {
+        if (/\.css$/.test(entry)) return 'style';
+        if (/\.(woff2|woff|ttf|eot)$/.test(entry)) return 'font';
+        if (/\.(png|jpe?g|gif|webp|svg)$/.test(entry)) return 'image';
+        return 'script';
+      }
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css?version=[contenthash]',
+      chunkFilename: 'css/[name].[id].css?version=[contenthash]',
     }),
   ]
 };
