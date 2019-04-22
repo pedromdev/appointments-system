@@ -11,6 +11,7 @@ import schema from './graphql/Schema';
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.use(express.static('public'))
 app.use(bodyParser.json());
 app.use('/api', api);
 app.use('/graphql', authenticate, expressGraphQL({

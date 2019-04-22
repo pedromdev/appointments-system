@@ -26,7 +26,8 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'js/[name].js?version=[contenthash]'
+    filename: 'js/[name].js?version=[contenthash]',
+    chunkFilename: 'js/bundle.[id].js?version=[contenthash]'
   },
   devtool: isDevMode ? 'eval-cheap-module-source-map' : 'source-map',
   module: {

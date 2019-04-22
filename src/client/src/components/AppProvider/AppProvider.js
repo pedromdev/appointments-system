@@ -28,6 +28,7 @@ class AppProvider extends Component {
         error: red
       },
       typography: {
+        useNextVariants: true,
         fontFamily: 'Roboto,"Helvetica Neue",Arial,sans-serif',
         headline: {
           fontSize: '1rem',
