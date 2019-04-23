@@ -8,7 +8,7 @@ const Signin = LazyImport({
   loader: () => import('./Authentication/Signin')
 });
 const Signup = LazyImport({
-  loader: () => import('./Authentication/Signin')
+  loader: () => import('./Authentication/Signup')
 });
 
 // Errors
@@ -18,12 +18,6 @@ const NotFound = LazyImport({
 const BackendError = LazyImport({
   loader: () => import('./Errors/BackendError')
 });
-
-// export {default as PasswordReset} from './Authentication/PasswordReset';
-// export {default as Signin} from './Authentication/Signin';
-// export {default as Signup} from './Authentication/Signup';
-// export {default as NotFound} from './Errors/NotFound';
-// export {default as BackendError} from './Errors/BackendError';
 
 export {
   PasswordReset,
