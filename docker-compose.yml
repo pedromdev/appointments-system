@@ -12,10 +12,7 @@ services:
       NODE_ENV: development
       MONGODB_URI: mongodb://root:root@database:27017/admin
       JWT_SECRET_KEY_TOKEN: abc123
-    entrypoint:
-      - npm
-      - run
-      - dev
+    entrypoint: /entrypoint.sh
     depends_on:
       - database
   database:
