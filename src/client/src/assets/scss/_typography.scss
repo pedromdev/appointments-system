@@ -1,0 +1,164 @@
+/* $typography
+ ------------------------------------------*/
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:focus,
+a:hover {
+  cursor: pointer;
+  text-decoration: none;
+  outline: 0;
+}
+
+button {
+  outline: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.text-justify {
+  text-align: justify !important;
+}
+
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+.text-xs-left {
+  text-align: left !important;
+}
+
+.text-xs-right {
+  text-align: right !important;
+}
+
+.text-xs-center {
+  text-align: center !important;
+}
+
+@media (min-width: 600px) {
+  .text-sm-left {
+    text-align: left !important;
+  }
+
+  .text-sm-right {
+    text-align: right !important;
+  }
+
+  .text-sm-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .text-md-left {
+    text-align: left !important;
+  }
+
+  .text-md-right {
+    text-align: right !important;
+  }
+
+  .text-md-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .text-lg-left {
+    text-align: left !important;
+  }
+
+  .text-lg-right {
+    text-align: right !important;
+  }
+
+  .text-lg-center {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .text-xl-left {
+    text-align: left !important;
+  }
+
+  .text-xl-right {
+    text-align: right !important;
+  }
+
+  .text-xl-center {
+    text-align: center !important;
+  }
+}
+
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.text-xs {
+  font-size: 50% !important;
+}
+
+.text-sm {
+  font-size: 70% !important;
+}
+
+.text-md {
+  font-size: 80% !important;
+}
+
+.text-df {
+  font-size: 13px !important;
+}
+
+.text-lg {
+  font-size: 110% !important;
+}
+
+.text-xl {
+  font-size: 120% !important;
+}
+
+.text-xxl {
+  font-size: 60px !important;
+}
+
+.font-weight-normal {
+  font-weight: normal !important;
+}
+
+.font-weight-bold {
+  font-weight: 500 !important;
+}
+
+.font-italic {
+  font-style: italic !important;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
