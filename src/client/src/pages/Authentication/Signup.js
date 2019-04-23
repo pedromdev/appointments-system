@@ -23,7 +23,6 @@ const Signup = (props) => {
               <form>
                 <div className="text-xs-center pb-xs">
                   <img src="/static/images/logo-dark.svg" alt=""/>
-                  <Typography variant="caption">Create an app id to continue.</Typography>
                 </div>
                 <TextField
                   id="email"
@@ -57,7 +56,7 @@ const Signup = (props) => {
                   label="I have read and agree to the terms of service."
                   className={classes.fullWidth}
                 />
-                <Button variant="raised" color="primary" fullWidth type="submit">Create your account</Button>
+                <Button variant="contained" color="primary" fullWidth type="submit">Create your account</Button>
                 <div className="pt-1 text-xs-center">
                   <Link to="/forgot">
                     <Button>Forgot password?</Button>

@@ -30,7 +30,7 @@ const PasswordReset = (props) => {
                   fullWidth
                   margin="normal"
                 />
-                <Button variant="raised" color="primary" fullWidth className="mt-1" type="submit">Send password reset</Button>
+                <Button variant="contained" color="primary" fullWidth className="mt-1" type="submit">Send password reset</Button>
                 <div className="pt-1 text-xs-center">
                   <Link to="/signin">
                     <Button>Sign</Button>

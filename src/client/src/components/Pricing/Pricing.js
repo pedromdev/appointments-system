@@ -41,7 +41,7 @@ const Pricing = (props) => {
         ))}
       </List>
       <CardActions className={classes.actions} disableActionSpacing>
-        <Button variant="raised" color="secondary" className={classes.centered}>Choose plan</Button>
+        <Button variant="contained" color="secondary" className={classes.centered}>Choose plan</Button>
       </CardActions>
     </Card>
   );

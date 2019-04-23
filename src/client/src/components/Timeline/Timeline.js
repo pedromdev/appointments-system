@@ -14,7 +14,7 @@ const Timeline = (props) => {
     <div className={classes.timeline}>
       { title &&
         <div className={classNames(classes.card, 'text-lg-center')}>
-          <Button variant="raised" color="primary">{title}</Button>
+          <Button variant="contained" color="primary">{title}</Button>
         </div>
       }
       { timeline.map((item, index) => (

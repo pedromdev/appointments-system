@@ -49,7 +49,7 @@ const Signin = (props) => {
                   label="Stayed logged in"
                   className={classes.fullWidth}
                 />
-                <Button variant="raised" color="primary" fullWidth type="submit">Login</Button>
+                <Button variant="contained" color="primary" fullWidth type="submit">Login</Button>
                 <div className="pt-1 text-md-center">
                   <Link to="/forgot">
                     <Button>Forgot password?</Button>
