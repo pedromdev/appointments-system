@@ -65,4 +65,6 @@ typings/
 .vscode
 
 # project folders
+public/js/*.map
+public/css/*.map
 scripts/
