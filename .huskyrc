@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-push": "npm run build && git add public && git commit -m 'Updated: public files'"
+  }
+}
