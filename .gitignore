@@ -65,6 +65,4 @@ typings/
 .vscode
 
 # project folders
-build/
-public/
 scripts/
