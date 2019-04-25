@@ -1,4 +1,5 @@
 const path = require('path');
+const {DefinePlugin} = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
@@ -22,7 +23,10 @@ const isDevMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
   entry: {
-    bundle: './src/client/index.js',
+    bundle: [
+      '@babel/polyfill',
+      './src/client/index.js'
+    ],
   },
   output: {
     path: path.join(__dirname, 'public'),
@@ -63,6 +67,12 @@ module.exports = {
     ]
   },
   plugins: [
+    new DefinePlugin({
+      'process.env': JSON.stringify({
+        NODE_ENV: process.env.NODE_ENV,
+        REACT_SENTRY_DSN: process.env.REACT_SENTRY_DSN,
+      })
+    }),
     new HtmlWebpackPlugin({
       template: './src/client/index.html'
     }),
