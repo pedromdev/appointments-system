@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SizePlugin = require('size-plugin');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 const VENDOR_LIBS = [
   '@sentry/browser',
@@ -20,6 +22,35 @@ const VENDOR_LIBS = [
 ];
 
 const isDevMode = process.env.NODE_ENV === 'development';
+
+const plugins = [
+  new DefinePlugin({
+    'process.env': JSON.stringify({
+      NODE_ENV: process.env.NODE_ENV,
+      REACT_SENTRY_DSN: process.env.REACT_SENTRY_DSN,
+    })
+  }),
+  new HtmlWebpackPlugin({ template: './src/client/index.html' }),
+  // new PreloadWebpackPlugin({
+  //   rel: 'preload',
+  //   as(entry) {
+  //     if (/\.css$/.test(entry)) return 'style';
+  //     if (/\.(woff2|woff|ttf|eot)$/.test(entry)) return 'font';
+  //     if (/\.(png|jpe?g|gif|webp|svg)$/.test(entry)) return 'image';
+  //     return 'script';
+  //   }
+  // }),
+  new MiniCssExtractPlugin({
+    filename: 'css/[name].css?version=[contenthash]',
+    chunkFilename: 'css/[name].[id].css?version=[contenthash]',
+  }),
+  new SizePlugin()
+];
+
+if (isDevMode) {
+  plugins.push(new LiveReloadPlugin({ appendScriptTag: true }));
+  plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:8080' }));
+}
 
 module.exports = {
   entry: {
@@ -66,29 +97,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new DefinePlugin({
-      'process.env': JSON.stringify({
-        NODE_ENV: process.env.NODE_ENV,
-        REACT_SENTRY_DSN: process.env.REACT_SENTRY_DSN,
-      })
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/client/index.html'
-    }),
-    // new PreloadWebpackPlugin({
-    //   rel: 'preload',
-    //   as(entry) {
-    //     if (/\.css$/.test(entry)) return 'style';
-    //     if (/\.(woff2|woff|ttf|eot)$/.test(entry)) return 'font';
-    //     if (/\.(png|jpe?g|gif|webp|svg)$/.test(entry)) return 'image';
-    //     return 'script';
-    //   }
-    // }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].css?version=[contenthash]',
-      chunkFilename: 'css/[name].[id].css?version=[contenthash]',
-    }),
-    new SizePlugin()
-  ]
+  plugins
 };
