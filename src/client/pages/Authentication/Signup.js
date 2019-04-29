@@ -8,20 +8,20 @@ import CardContent from '@material-ui/core/CardContent/index';
 import Button from '@material-ui/core/Button/index';
 import FormControlLabel from '@material-ui/core/FormControlLabel/index';
 import TextField from '@material-ui/core/TextField/index';
+import FormHelperText from '@material-ui/core/FormHelperText/index';
 import Checkbox from '@material-ui/core/Checkbox/index';
 import Typography from '@material-ui/core/Typography/index';
 import { Link } from 'react-router-dom';
 import SessionStyles from '../../styles/Session';
 import {signup} from "../../ducks/auth";
+import {validation} from "../../helpers/reduxState";
 
 const Signup = (props) => {
   const { classes } = props;
   const [formData, setFormData] = useState({});
   const useChangeField = name => e => {
-    setFormData({
-      ...formData,
-      [name]: !!e.target.value ? e.target.value : undefined
-    })
+    formData[name] = !!e.target.value ? e.target.value : undefined;
+    setFormData({ ...formData });
   };
 
   return (
@@ -41,27 +41,39 @@ const Signup = (props) => {
                   id="name"
                   label="Name"
                   className={classes.textField}
+                  error={props.errors.has('name')}
                   fullWidth
                   margin="normal"
                   onChange={useChangeField('name')}
                 />
+                {props.errors.has('name') && <FormHelperText error={true}>
+                  {props.errors.get('name')}
+                </FormHelperText>}
                 <TextField
                   id="email"
                   label="Email address"
                   className={classes.textField}
+                  error={props.errors.has('email')}
                   fullWidth
                   margin="normal"
                   onChange={useChangeField('email')}
                 />
+                {props.errors.has('email') && <FormHelperText error={true}>
+                  {props.errors.get('email')}
+                </FormHelperText>}
                 <TextField
                   id="password"
                   label="Password"
                   className={classes.textField}
+                  error={props.errors.has('password')}
                   type="password"
                   fullWidth
                   margin="normal"
                   onChange={useChangeField('password')}
                 />
+                {props.errors.has('password') && <FormHelperText error={true}>
+                  {props.errors.get('password')}
+                </FormHelperText>}
                 <TextField
                   id="cpassword"
                   label="Confirm Password"
@@ -104,5 +116,9 @@ Signup.propTypes = {
 };
 
 export default withStyles(SessionStyles)(
-  connect(null, { signup })(Signup)
+  connect(state => ({
+    ...validation(state)
+  }), {
+    signup
+  })(Signup)
 );

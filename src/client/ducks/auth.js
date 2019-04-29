@@ -19,13 +19,13 @@ export default duck.createReducer({
 
 export const updateToken = duck.createAction(UPDATE_TOKEN);
 
-export const signup = async (name, email, password) => {
+export const signup = async ({name, email, password}) => {
   const { data } = await axios.post('/api/signup', { name, email, password });
 
   return updateToken(data);
 };
 
-export const signin = async (email, password) => {
+export const signin = async ({email, password}) => {
   const { data } = await axios.post('/api/signin', { email, password });
 
   return updateToken(data);
