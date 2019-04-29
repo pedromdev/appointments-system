@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-push": "npm run build && git add public && git commit -m 'Updated: public files'"
+    "pre-push": "npm run build && if [ \"$(git st | grep public/)\" != \"\" ]; then git add public && git commit -m 'Updated: public files'; fi"
   }
 }
