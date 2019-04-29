@@ -6,13 +6,16 @@ services:
       context: .
     ports:
       - 8080:8080
+      - 35729:35729
     volumes:
       - .:/app
     environment:
+      APP_ENV: docker
       NODE_ENV: development
       MONGODB_URI: mongodb://root:root@database:27017/admin
       JWT_SECRET_KEY_TOKEN: abc123
       REACT_SENTRY_DSN: abc123
+      LIVERELOAD_PORT: 32000
     entrypoint: /entrypoint.sh
     depends_on:
       - database

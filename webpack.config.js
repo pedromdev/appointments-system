@@ -49,7 +49,8 @@ const plugins = [
 
 if (isDevMode) {
   plugins.push(new LiveReloadPlugin({ appendScriptTag: true }));
-  plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:8080' }));
+
+  if (process.env.APP_ENV !== 'docker') plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:8080' }));
 }
 
 module.exports = {
