@@ -15,6 +15,7 @@ import AppProvider from './components/AppProvider/AppProvider';
 import { NotFound, BackendError, Signup, Signin, PasswordReset } from './pages';
 
 import './assets/scss/main.scss';
+import IntlProvider from "./components/Providers/IntlProvider";
 
 const Dashboard = LazyImport({
   loader: () => import('./containers/Dashboard')
@@ -23,18 +24,20 @@ const Dashboard = LazyImport({
 let Root = () => (
   <Provider store={store}>
     <ApolloProvider client={client}>
-      <AppProvider>
-        <Router>
-          <Switch>
-            <Route exact path="/404" component={NotFound} />
-            <Route exact path="/500" component={BackendError} />
-            <Route exact path="/forgot" component={PasswordReset} />
-            <Route exact path="/signin" component={Signin} />
-            <Route exact path="/signup" component={Signup} />
-            <Route path="/" component={Dashboard} />
-          </Switch>
-        </Router>
-      </AppProvider>
+      <IntlProvider>
+        <AppProvider>
+          <Router>
+            <Switch>
+              <Route exact path="/404" component={NotFound} />
+              <Route exact path="/500" component={BackendError} />
+              <Route exact path="/forgot" component={PasswordReset} />
+              <Route exact path="/signin" component={Signin} />
+              <Route exact path="/signup" component={Signup} />
+              <Route path="/" component={Dashboard} />
+            </Switch>
+          </Router>
+        </AppProvider>
+      </IntlProvider>
     </ApolloProvider>
   </Provider>
 );
