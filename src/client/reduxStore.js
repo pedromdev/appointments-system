@@ -3,6 +3,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import * as reducers from './ducks';
 
 import multiActions from "./middlewares/multiActions";
+import locales from "./middlewares/locales";
 import asyncActions from "./middlewares/asyncActions";
 
 const rootReducer = combineReducers(reducers);
@@ -18,7 +19,8 @@ export default createStore(
   composeEnhancers(
     applyMiddleware(
       multiActions,
-      asyncActions
+      asyncActions,
+      locales
     )
   )
 )

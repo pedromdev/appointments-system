@@ -2,7 +2,9 @@ import { createDuck } from 'redux-duck';
 
 const duck = createDuck('locale', 'appointments');
 
-const UPDATE_LOCALE = duck.defineType('UPDATE');
+export const UPDATE_LOCALE = duck.defineType('UPDATE');
+
+const initialLocale = localStorage.getItem('locale') || navigator.language;
 
 export default duck.createReducer({
   [UPDATE_LOCALE]: (state, action) => {
@@ -12,6 +14,6 @@ export default duck.createReducer({
 
     return locale;
   }
-}, localStorage.getItem('locale') || navigator.language);
+}, initialLocale);
 
 export const updateLocale = duck.createAction(UPDATE_LOCALE);

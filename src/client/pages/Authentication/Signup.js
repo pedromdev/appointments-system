@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import SessionStyles from '../../styles/Session';
 import {signup} from "../../ducks/auth";
 import {validation} from "../../helpers/reduxState";
+import Translate from '../../components/Translate/Translate';
 
 const Signup = (props) => {
   const { classes } = props;
@@ -39,7 +40,7 @@ const Signup = (props) => {
                 </div>
                 <TextField
                   id="name"
-                  label="Name"
+                  label={<Translate content="form.name.label" />}
                   className={classes.textField}
                   error={props.errors.has('name')}
                   fullWidth
