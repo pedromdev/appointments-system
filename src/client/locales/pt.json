@@ -1,8 +1,28 @@
 {
   "form": {
     "name": {
-      "label": "Nome",
-      "input": "Nome"
+      "label": "Nome"
+    },
+    "email": {
+      "label": "Endereço de Email"
+    },
+    "password": {
+      "label": "Senha"
+    },
+    "cpassword": {
+      "label": "Confirmar Senha"
+    },
+    "terms": {
+      "label": "Eu li e aceito os termos de uso."
+    },
+    "signup": {
+      "button": "Criar conta"
+    },
+    "forgotPassword": {
+      "link": "Esqueceu a senha?"
+    },
+    "signin": {
+      "link": "Acesse sua conta."
     }
   }
 }

@@ -52,7 +52,7 @@ const Signup = (props) => {
                 </FormHelperText>}
                 <TextField
                   id="email"
-                  label="Email address"
+                  label={<Translate content="form.email.label" />}
                   className={classes.textField}
                   error={props.errors.has('email')}
                   fullWidth
@@ -64,7 +64,7 @@ const Signup = (props) => {
                 </FormHelperText>}
                 <TextField
                   id="password"
-                  label="Password"
+                  label={<Translate content="form.password.label" />}
                   className={classes.textField}
                   error={props.errors.has('password')}
                   type="password"
@@ -77,7 +77,7 @@ const Signup = (props) => {
                 </FormHelperText>}
                 <TextField
                   id="cpassword"
-                  label="Confirm Password"
+                  label={<Translate content="form.cpassword.label" />}
                   className={classes.textField}
                   type="password"
                   fullWidth
@@ -90,17 +90,23 @@ const Signup = (props) => {
                       required
                     />
                   }
-                  label="I have read and agree to the terms of service."
+                  label={<Translate content="form.terms.label" />}
                   className={classes.fullWidth}
                 />
-                <Button variant="contained" color="primary" fullWidth type="submit">Create your account</Button>
+                <Button variant="contained" color="primary" fullWidth type="submit">
+                  <Translate content="form.signup.button" />
+                </Button>
                 <div className="pt-1 text-xs-center">
                   <Link to="/forgot">
-                    <Button>Forgot password?</Button>
+                    <Button>
+                      <Translate content="form.forgotPassword.link" />
+                    </Button>
                   </Link>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   <Link to="/signin">
-                    <Button>Access your account.</Button>
+                    <Button>
+                      <Translate content="form.signin.link" />
+                    </Button>
                   </Link>
                 </div>
               </form>
