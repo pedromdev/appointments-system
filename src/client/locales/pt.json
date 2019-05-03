@@ -10,7 +10,11 @@
       "label": "Senha"
     },
     "cpassword": {
-      "label": "Confirmar Senha"
+      "label": "Confirmar Senha",
+      "error": {
+        "required": "É necessário comfirmar a senha",
+        "notMatch": "Ambas as senhas não são iguais"
+      }
     },
     "terms": {
       "label": "Eu li e aceito os termos de uso."

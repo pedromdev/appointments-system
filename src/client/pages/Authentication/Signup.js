@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
@@ -16,14 +16,36 @@ import SessionStyles from '../../styles/Session';
 import {signup} from "../../ducks/auth";
 import {validation} from "../../helpers/reduxState";
 import Translate from '../../components/Translate/Translate';
+import {addError} from "../../ducks/validationErrors";
 
 const Signup = (props) => {
   const { classes } = props;
   const [formData, setFormData] = useState({});
+  const [submitted, isSubmitted] = useState(false);
   const useChangeField = name => e => {
     formData[name] = !!e.target.value ? e.target.value : undefined;
     setFormData({ ...formData });
   };
+  const errorsFields = props.errors.getFields();
+
+  useEffect(() => {
+    if (!submitted) return;
+    if (errorsFields.filter(field => field.path === 'cpassword').length > 0) return;
+
+    if (!!formData.cpassword === false) {
+      props.addError({
+        path: 'cpassword',
+        type: 'required',
+        message: <Translate content="form.cpassword.error.required"/>
+      });
+    } else if (formData.cpassword !== formData.password) {
+      props.addError({
+        path: 'cpassword',
+        type: 'notMatch',
+        message: <Translate content="form.cpassword.error.notMatch" />
+      });
+    }
+  }, [errorsFields]);
 
   return (
     <div className={classNames(classes.session, classes.background)}>
@@ -34,6 +56,7 @@ const Signup = (props) => {
               <form onSubmit={e => {
                 e.preventDefault();
                 props.signup(formData);
+                isSubmitted(true);
               }}>
                 <div className="text-xs-center pb-xs">
                   {/*<img src="/static/images/logo-dark.svg" alt=""/>*/}
@@ -79,10 +102,15 @@ const Signup = (props) => {
                   id="cpassword"
                   label={<Translate content="form.cpassword.label" />}
                   className={classes.textField}
+                  error={props.errors.has('cpassword')}
                   type="password"
                   fullWidth
                   margin="normal"
+                  onChange={useChangeField('cpassword')}
                 />
+                {props.errors.has('cpassword') && <FormHelperText error={true}>
+                  {props.errors.get('cpassword')}
+                </FormHelperText>}
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -126,6 +154,7 @@ export default withStyles(SessionStyles)(
   connect(state => ({
     ...validation(state)
   }), {
+    addError,
     signup
   })(Signup)
 );

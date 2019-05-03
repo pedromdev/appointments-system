@@ -13,6 +13,9 @@ export const validation = state => ({
       if (!fieldError) return;
 
       return fieldError.message;
+    },
+    getFields() {
+      return state.validationErrors.fields;
     }
   }
 });

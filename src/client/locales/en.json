@@ -10,7 +10,11 @@
       "label": "Password"
     },
     "cpassword": {
-      "label": "Confirm Password"
+      "label": "Confirm Password",
+      "error": {
+        "required": "It's required to confirm password",
+        "notMatch": "The both passwords aren't match"
+      }
     },
     "terms": {
       "label": "I have read and agree to the terms of service."
