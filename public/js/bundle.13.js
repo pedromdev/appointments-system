@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{796:function(o){o.exports={form:{name:{label:"Nome",input:"Nome"}}}}}]);
-//# sourceMappingURL=bundle.13.js.map?version=0466a684aebab07819ac
+(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{797:function(e){e.exports={form:{name:{label:"Nome"},email:{label:"Endereço de Email"},password:{label:"Senha"},cpassword:{label:"Confirmar Senha",error:{required:"É necessário comfirmar a senha",notMatch:"Ambas as senhas não são iguais"}},terms:{label:"Eu li e aceito os termos de uso."},signup:{button:"Criar conta"},forgotPassword:{link:"Esqueceu a senha?"},signin:{link:"Acesse sua conta."}}}}}]);
+//# sourceMappingURL=bundle.13.js.map?version=fd8a305f5f82ae691f59

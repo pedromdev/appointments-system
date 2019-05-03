@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[12],{795:function(n){n.exports={form:{name:{label:"Name",input:"Name"}}}}}]);
-//# sourceMappingURL=bundle.12.js.map?version=0b10440fa57aa6df3a4a
+(window.webpackJsonp=window.webpackJsonp||[]).push([[12],{796:function(o){o.exports={form:{name:{label:"Name"},email:{label:"Email Address"},password:{label:"Password"},cpassword:{label:"Confirm Password",error:{required:"It's required to confirm password",notMatch:"The both passwords aren't match"}},terms:{label:"I have read and agree to the terms of service."},signup:{button:"Create you account"},forgotPassword:{link:"Forgot password?"},signin:{link:"Access your account."}}}}}]);
+//# sourceMappingURL=bundle.12.js.map?version=6f8631b76c30df4b5971
