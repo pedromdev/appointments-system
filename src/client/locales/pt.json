@@ -27,6 +27,11 @@
     },
     "signin": {
       "link": "Acesse sua conta."
+    },
+    "validators": {
+      "maxLength": "Este campo deve ter no máximo %(max)s caracteres",
+      "minLength": "Este campo deve ter no mínimo %(min)s caracteres",
+      "notEmpty": "Este campo é obrigatório"
     }
   }
 }
