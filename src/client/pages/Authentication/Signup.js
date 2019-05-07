@@ -17,6 +17,7 @@ import {signup} from "../../ducks/auth";
 import {validation} from "../../helpers/reduxState";
 import Translate from '../../components/Translate/Translate';
 import {addError} from "../../ducks/validationErrors";
+import Logo from "../../components/Brand/Logo";
 
 const Signup = (props) => {
   const { classes } = props;
@@ -59,7 +60,7 @@ const Signup = (props) => {
                 isSubmitted(true);
               }}>
                 <div className="text-xs-center pb-xs">
-                  {/*<img src="/static/images/logo-dark.svg" alt=""/>*/}
+                  <Logo type="normal"/>
                 </div>
                 <TextField
                   id="name"
@@ -144,7 +145,7 @@ const Signup = (props) => {
       </div>
     </div>
   );
-}
+};
 
 Signup.propTypes = {
   classes: PropTypes.object.isRequired,
