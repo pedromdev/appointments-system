@@ -1,151 +1,165 @@
-const User = require('../../models/User').default;
-const MongooseConnection = require('../../connections/mongoose').default;
-const Jwt = require('../../configurations/jwt').default;
-const bcrypt = require('bcryptjs');
+const User = require('../../models/User').default
+const database = require('../../test/database')
+const Jwt = require('../../configurations/jwt').default
+const bcrypt = require('bcryptjs')
 
 let exampleUser = {
   name: 'abc',
   email: 'example@gmail.com',
   password: '123456'
-};
+}
 
 describe('User model', () => {
 
-  beforeAll(async () => {
-    await MongooseConnection.open();
-  });
+  beforeEach(async () => {
+    await database.start()
+  })
 
-  afterAll(async () => {
-    await MongooseConnection.close();
-  });
+  afterEach(async () => {
+    await database.stop()
+  })
 
   describe('Validations', () => {
-
     it('should return an error when I try to save a user without required fields', async () => {
-      let user = new User();
+      let user = new User()
 
       try {
-        await user.save();
-        fail(new Error('User saved'));
+        await user.save()
+        fail(new Error('User saved'))
       } catch (e) {
-        expect(e.errors.name.message).toEqual('É preciso informar o nome');
-        expect(e.errors.email.message).toEqual('É preciso informar o e-mail');
-        expect(e.errors.password.message).toEqual('É preciso informar a senha');
+        expect(e.errors.name.message).toEqual('É preciso informar o nome')
+        expect(e.errors.email.message).toEqual('É preciso informar o e-mail')
+        expect(e.errors.password.message).toEqual('É preciso informar a senha')
       }
-    });
+    })
 
     it('should return an error when I try to save a user with a name with less than 3 characters', async () => {
       let user = new User({
         name: 'ab',
         email: 'example@gmail.com',
         password: '123456'
-      });
+      })
 
       try {
-        await user.save();
-        fail(new Error('User saved'));
+        await user.save()
+        fail(new Error('User saved'))
       } catch (e) {
-        expect(e.errors.name.message).toEqual('O nome precisa ter pelo menos 3 caracteres');
+        expect(e.errors.name.message).toEqual(
+          'O nome precisa ter pelo menos 3 caracteres'
+        )
       }
-    });
+    })
 
     it('should return an error when I try to save a user with a password with less than 6 characters', async () => {
       let user = new User({
         name: 'abc',
         email: 'example@gmail.com',
         password: '12345'
-      });
+      })
 
       try {
-        await user.save();
-        fail(new Error('User saved'));
+        await user.save()
+        fail(new Error('User saved'))
       } catch (e) {
-        expect(e.errors.password.message).toEqual('A senha deve ter pelo menos 6 caracteres');
+        expect(e.errors.password.message).toEqual(
+          'A senha deve ter pelo menos 6 caracteres'
+        )
       }
-    });
+    })
 
     it('should return an error when I try to save a user with an invalid email', async () => {
       let user = new User({
         name: 'abc',
         email: 'example',
         password: '123456'
-      });
+      })
 
       try {
-        await user.save();
-        fail(new Error('User saved'));
+        await user.save()
+        fail(new Error('User saved'))
       } catch (e) {
-        expect(e.errors.email.message).toEqual('example não é um e-mail válido');
+        expect(e.errors.email.message).toEqual('example não é um e-mail válido')
       }
-    });
+    })
 
     it('should return an error when I try to save a user with an existing email', async () => {
-      let user = new User(exampleUser);
+      let user = new User(exampleUser)
       let user2 = new User({
         name: 'abc2',
         email: 'example@gmail.com',
         password: '654321'
-      });
+      })
 
       try {
-        await user.save();
+        await user.save()
 
         try {
-          await user2.save();
-          fail(new Error('User2 saved'));
+          await user2.save()
+          fail(new Error('User2 saved'))
         } catch (e) {
-          expect(e.errors.email.message).toEqual('example@gmail.com já está registrado');
+          expect(e.errors.email.message).toEqual(
+            'example@gmail.com já está registrado'
+          )
         }
       } catch (e) {
-        fail(e);
+        fail(e)
       } finally {
-        await User.deleteMany({});
+        await User.deleteMany({})
       }
-    });
+    })
+  })
 
-  });
-  
   describe('Hooks', () => {
-
     beforeEach(async () => {
-      await User.deleteMany({});
-    });
+      await User.deleteMany({})
+    })
 
     it('should encrypt the password on pre save', async () => {
-      let user = new User(exampleUser);
+      let user = new User(exampleUser)
 
       try {
-        await user.save();
-        expect(bcrypt.compareSync(exampleUser.password, user.password)).toBeTruthy();
+        await user.save()
+        expect(
+          bcrypt.compareSync(exampleUser.password, user.password)
+        ).toBeTruthy()
       } catch (e) {
-        fail(e);
+        fail(e)
       }
-    });
-
-  });
+    })
+  })
 
   describe('Methods', () => {
-
     beforeEach(async () => {
-      await User.deleteMany({});
-    });
+      await User.deleteMany({})
+    })
 
-    it('should return a valid JSON Web Token', async() => {
-      let user = new User(exampleUser);
+    it('should return a valid JSON Web Token', async () => {
+      let user = new User(exampleUser)
 
       try {
-        await user.save();
+        await user.save()
 
-        let token = user.getToken();
-        let decodedToken = Jwt.decode(token);
+        let token = user.getToken()
+        let decodedToken = Jwt.decode(token)
 
-        expect(decodedToken.sub).toEqual(user._id.toHexString());
-        expect(decodedToken.scope).toEqual('auth');
+        expect(decodedToken.sub).toEqual(user._id.toHexString())
+        expect(decodedToken.scope).toEqual('auth')
       } catch (e) {
-        fail(e);
+        fail(e)
       }
-    });
+    })
 
-  });
+    it('should check the user password', async () => {
+      let user = new User(exampleUser)
 
-});
+      try {
+        await user.save()
+
+        expect(user.checkPassword('123456')).toBeTruthy()
+        expect(user.checkPassword('1234562')).toBeFalsy()
+      } catch (e) {
+        fail(e)
+      }
+    })
+  })
+})

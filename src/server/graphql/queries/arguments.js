@@ -1,9 +1,9 @@
-import {GraphQLString, GraphQLEnumType} from "graphql";
-import {DateScalarType} from "../scalar-types";
+import { GraphQLString, GraphQLEnumType } from 'graphql'
+import { DateScalarType } from '../scalar-types'
 
 export const schedule = {
-  start: {type: DateScalarType},
-  end: {type: DateScalarType},
+  start: { type: DateScalarType },
+  end: { type: DateScalarType },
   status: {
     type: new GraphQLEnumType({
       name: 'Status',
@@ -16,12 +16,12 @@ export const schedule = {
         },
         CANCELLED: {
           value: 'CANCELLED'
-        },
-      },
-    }),
+        }
+      }
+    })
   }
-};
+}
 
 export const procedure = {
-  name: {type: GraphQLString}
-};
+  name: { type: GraphQLString }
+}

@@ -1,6 +1,6 @@
-const MongooseConnection = require('../connections/mongoose').default;
+require('../environment')
+const database = require('../test/database')
 
 module.exports = async () => {
-  console.log('\nSetup MongoDB Test Environment');
-  await MongooseConnection.open();
-};
+  await database.start()
+}

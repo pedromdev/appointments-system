@@ -1,135 +1,134 @@
-const User = require('../../models/User').default;
-const Doctor = require('../../models/Doctor').default;
-const Procedure = require('../../models/Procedure').default;
-const Schedule = require('../../models/Schedule').default;
-const MongooseConnection = require('../../connections/mongoose').default;
-const {ObjectID} = require('mongodb');
+const { ObjectID } = require('mongodb')
+const User = require('../../models/User').default
+const Doctor = require('../../models/Doctor').default
+const Procedure = require('../../models/Procedure').default
+const Schedule = require('../../models/Schedule').default
+const database = require('../../test/database')
 
-const doid = new ObjectID('2530e03eecbb9aeabad86644');
-const uoid = new ObjectID('1f1ad587397ce9e77ff6996e');
-const poid = new ObjectID('6110a840c9ad21c90b42d730');
+const doid = new ObjectID('2530e03eecbb9aeabad86644')
+const uoid = new ObjectID('1f1ad587397ce9e77ff6996e')
+const poid = new ObjectID('6110a840c9ad21c90b42d730')
 
+let procedure
 let scheduleData = {
   _user_id: uoid,
   _doctor_id: doid,
   _procedure_id: poid,
   datetime: new Date('2030-02-12T12:00:00')
-};
+}
+const modelsToClear = [Schedule]
+
+beforeAll(async () => {
+  await database.start()
+
+  procedure = new Procedure({
+    _id: poid,
+    name: 'xyz',
+    _doctor_id: doid,
+    duration: 60
+  })
+  await procedure.save()
+})
+
+afterAll(async () => {
+  await database.stop()
+})
 
 describe('Schedule model', () => {
 
-  beforeAll(async () => {
-    await MongooseConnection.open();
-  });
-
-  afterAll(async () => {
-    await MongooseConnection.close();
-  });
-
   describe('Validations', () => {
-    let procedure;
-
-    beforeEach(async () => {
-      procedure = new Procedure({
-        _id: poid,
-        name: 'xyz',
-        _doctor_id: doid,
-        duration: 60
-      });
-      await procedure.save();
-    });
 
     afterEach(async () => {
-      await Procedure.deleteMany({});
-      await Schedule.deleteMany({});
-    });
+      await database.clear(modelsToClear)
+    })
 
     it('should return an error when I try to save a schedule without required fields', async () => {
-      let schedule = new Schedule({});
+      let schedule = new Schedule({})
 
       try {
-        await schedule.save();
-        fail(new Error('Schedule saved'));
+        await schedule.save()
+        fail(new Error('Schedule saved'))
       } catch (e) {
-        expect(e.errors._user_id.message).toEqual('É necessário informar quem está marcando um horário');
-        expect(e.errors._doctor_id.message).toEqual('É necessário informar quem irá atender');
-        expect(e.errors._procedure_id.message).toEqual('É necessário informar o procedimento a ser realizado');
-        expect(e.errors.datetime.message).toEqual('É necessário informar o dia e o horário a serem marcados');
+        expect(e.errors._user_id.message).toEqual(
+          'É necessário informar quem está marcando um horário'
+        )
+        expect(e.errors._doctor_id.message).toEqual(
+          'É necessário informar quem irá atender'
+        )
+        expect(e.errors._procedure_id.message).toEqual(
+          'É necessário informar o procedimento a ser realizado'
+        )
+        expect(e.errors.datetime.message).toEqual(
+          'É necessário informar o dia e o horário a serem marcados'
+        )
       }
-    });
+    })
 
     it('should return an error when I try to save a schedule at the same datetime of another schedule', async () => {
-      let schedule = new Schedule({...scheduleData, status: 'CONFIRMED'});
-      let schedule2 = new Schedule(scheduleData);
+      let schedule = new Schedule({ ...scheduleData, status: 'CONFIRMED' })
+      let schedule2 = new Schedule(scheduleData)
 
       try {
-        await schedule.save();
-        await schedule2.save();
-        fail(new Error('Schedule saved'));
+        await schedule.save()
+        await schedule2.save()
+        fail(new Error('Schedule saved'))
       } catch (e) {
-        expect(e.errors.datetime.message).toEqual('O horário informado já foi marcado');
+        expect(e.errors.datetime.message).toEqual(
+          'O horário informado já foi marcado'
+        )
       }
-    });
+    })
 
     it('should return an error when I try to save a schedule at the moment of another', async () => {
       let schedule = new Schedule({
         ...scheduleData,
         status: 'CONFIRMED',
         datetime: new Date('2030-02-12T12:00:00')
-      });
+      })
       let schedule2 = new Schedule({
         ...scheduleData,
         datetime: new Date('2030-02-12T12:30:00')
-      });
+      })
 
       try {
-        await schedule.save();
-        await schedule2.save();
-        fail(new Error('Schedule saved'));
+        await schedule.save()
+        await schedule2.save()
+        fail(new Error('Schedule saved'))
       } catch (e) {
-        expect(e.errors.datetime.message).toEqual('O horário informado não pode ser marcado, pois o especialista não poderá atender');
+        expect(e.errors.datetime.message).toEqual(
+          'O horário informado não pode ser marcado, pois o especialista não poderá atender'
+        )
       }
-    });
+    })
 
     it('should return an error when I try to save a schedule that conflits with another schedule in the future', async () => {
       let schedule = new Schedule({
         ...scheduleData,
         status: 'CONFIRMED',
         datetime: new Date('2030-02-12T12:30:00')
-      });
+      })
       let schedule2 = new Schedule({
         ...scheduleData,
         datetime: new Date('2030-02-12T12:00:00')
-      });
+      })
 
       try {
-        await schedule.save();
-        await schedule2.save();
-        fail(new Error('Schedule saved'));
+        await schedule.save()
+        await schedule2.save()
+        fail(new Error('Schedule saved'))
       } catch (e) {
-        expect(e.errors.datetime.message).toEqual('O horário informado não pode ser marcado, pois o especialista não poderá atender');
+        expect(e.errors.datetime.message).toEqual(
+          'O horário informado não pode ser marcado, pois o especialista não poderá atender'
+        )
       }
-    });
-
-  });
+    })
+  })
 
   describe('Relationships', () => {
-    let procedure;
-
-    beforeEach(async () => {
-      procedure = new Procedure({
-      _id: poid,
-      name: 'xyz',
-      _doctor_id: doid,
-      duration: 60
-    });
-      await procedure.save();
-    });
 
     afterEach(async () => {
-      await Procedure.deleteMany({});
-      await Schedule.deleteMany({});
-    });
+      await database.clear(modelsToClear)
+    })
 
     it('should retrieve a user from schedule model', async () => {
       let user = new User({
@@ -137,61 +136,63 @@ describe('Schedule model', () => {
         name: 'abc',
         email: 'example@gmail.com',
         password: '123456'
-      });
-      let schedule = new Schedule(scheduleData);
+      })
+      let schedule = new Schedule(scheduleData)
 
       try {
-        await user.save();
-        await schedule.save();
+        await user.save()
+        await schedule.save()
 
-        let scheduleUser = await schedule.getUser();
+        let scheduleUser = await schedule.getUser()
 
-        expect(scheduleUser._id.toHexString()).toEqual(user._id.toHexString());
+        expect(scheduleUser._id.toHexString()).toEqual(user._id.toHexString())
       } catch (e) {
-        fail(e);
+        fail(e)
       } finally {
-        User.deleteMany({});
+        User.deleteMany({})
       }
-    });
+    })
 
     it('should retrieve a doctor from schedule model', async () => {
       let doctor = new Doctor({
         _id: doid,
         _user_id: uoid,
         medical_speciality: 'xyz'
-      });
-      let schedule = new Schedule(scheduleData);
+      })
+      let schedule = new Schedule(scheduleData)
 
       try {
-        await doctor.save();
-        await schedule.save();
+        await doctor.save()
+        await schedule.save()
 
-        let scheduleDoctor = await schedule.getDoctor();
+        let scheduleDoctor = await schedule.getDoctor()
 
-        expect(scheduleDoctor._id.toHexString()).toEqual(doctor._id.toHexString());
+        expect(scheduleDoctor._id.toHexString()).toEqual(
+          doctor._id.toHexString()
+        )
       } catch (e) {
-        fail(e);
+        fail(e)
       } finally {
-        Doctor.deleteMany({});
+        Doctor.deleteMany({})
       }
-    });
+    })
 
     it('should retrieve a procedure from schedule model', async () => {
-      let schedule = new Schedule(scheduleData);
+      let schedule = new Schedule(scheduleData)
 
       try {
-        await schedule.save();
+        await schedule.save()
 
-        let scheduleProcedure = await schedule.getProcedure();
+        let scheduleProcedure = await schedule.getProcedure()
 
-        expect(scheduleProcedure._id.toHexString()).toEqual(procedure._id.toHexString());
+        expect(scheduleProcedure._id.toHexString()).toEqual(
+          procedure._id.toHexString()
+        )
       } catch (e) {
-        fail(e);
+        fail(e)
       } finally {
-        Doctor.deleteMany({});
+        Doctor.deleteMany({})
       }
-    });
-
-  });
-
-});
+    })
+  })
+})

@@ -1,16 +1,16 @@
-import {model, Schema} from 'mongoose';
-import {isEmail} from 'validator';
-import uniqueValidator from 'mongoose-unique-validator';
-import bcrypt from 'bcryptjs';
+import { model, Schema } from 'mongoose'
+import { isEmail } from 'validator'
+import uniqueValidator from 'mongoose-unique-validator'
+import bcrypt from 'bcryptjs'
 
-import Jwt from '../configurations/jwt';
+import Jwt from '../configurations/jwt'
 
 const UserSchema = new Schema({
   name: {
     type: String,
     required: [true, 'É preciso informar o nome'],
     minlength: [3, 'O nome precisa ter pelo menos 3 caracteres'],
-    trim: true,
+    trim: true
   },
   email: {
     type: String,
@@ -29,32 +29,32 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: [true, 'É preciso informar a senha'],
-    minlength: [6, 'A senha deve ter pelo menos 6 caracteres'],
-  },
-});
+    minlength: [6, 'A senha deve ter pelo menos 6 caracteres']
+  }
+})
 
 UserSchema.plugin(uniqueValidator, {
   message: '{VALUE} já está registrado'
-});
+})
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {
-    let salt = bcrypt.genSaltSync(10);
-    this.password = bcrypt.hashSync(this.password, salt);
+    let salt = bcrypt.genSaltSync(10)
+    this.password = bcrypt.hashSync(this.password, salt)
   }
 
-  next();
-});
+  next()
+})
 
-UserSchema.methods.getToken = function (scope = 'auth') {
+UserSchema.methods.getToken = function(scope = 'auth') {
   return Jwt.sign({
-    sub: this._id.toHexString(),
+    sub: `${this._id}`,
     scope
-  });
-};
+  })
+}
 
-UserSchema.methods.checkPassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
-};
+UserSchema.methods.checkPassword = function(password) {
+  return bcrypt.compareSync(password, this.password)
+}
 
-export default model('User', UserSchema);
+export default model('User', UserSchema)

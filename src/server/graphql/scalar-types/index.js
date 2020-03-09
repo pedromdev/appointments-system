@@ -1,1 +1,1 @@
-export {default as DateScalarType} from './Date';
+export { default as DateScalarType } from './Date'

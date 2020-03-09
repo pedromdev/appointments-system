@@ -1,6 +1,5 @@
-const MongooseConnection = require('../connections/mongoose').default;
+const database = require('../test/database')
 
 module.exports = async () => {
-  console.log('Teardown MongoDB Test Environment');
-  await MongooseConnection.close();
-};
+  await database.stop()
+}

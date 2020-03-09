@@ -1,10 +1,10 @@
-import {GraphQLID, GraphQLObjectType, GraphQLString} from 'graphql';
+import { GraphQLID, GraphQLObjectType, GraphQLString } from 'graphql'
 
-import {DateScalarType} from '../scalar-types';
+import { DateScalarType } from '../scalar-types'
 
-import UserType from './UserType';
-import DoctorType from './DoctorType';
-import ProcedureType from './ProcedureType';
+import UserType from './UserType'
+import DoctorType from './DoctorType'
+import ProcedureType from './ProcedureType'
 
 const ScheduleType = new GraphQLObjectType({
   name: 'ScheduleType',
@@ -16,22 +16,22 @@ const ScheduleType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(model) {
-        return model.getUser();
+        return model.getUser()
       }
     },
     doctor: {
       type: DoctorType,
       resolve(model) {
-        return model.getDoctor();
+        return model.getDoctor()
       }
     },
     procedure: {
       type: ProcedureType,
       resolve(model) {
-        return model.getProcedure();
+        return model.getProcedure()
       }
     }
   })
-});
+})
 
-export default ScheduleType;
+export default ScheduleType

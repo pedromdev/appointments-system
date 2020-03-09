@@ -1,27 +1,19 @@
-import MongoMemoryServer from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server'
 
-import logger from '../utils/logger';
-
-let mongod;
-
-if (process.env.NODE_ENV === 'test') {
-  mongod = new MongoMemoryServer({
-    autoStart: false
-  });
-}
+const mongod = new MongoMemoryServer({
+  instance: {
+    auth: false,
+    dbName: 'appointment',
+    port: 27018
+  },
+  autoStart: false
+})
 
 export default {
-  getMongoD() {
-    return mongod;
+  startServer() {
+    return mongod.start()
   },
-  async getConnectionUri() {
-    if (process.env.NODE_ENV === 'test') {
-      if (!mongod.isRunning) {
-        await mongod.start();
-      }
-      return await mongod.getConnectionString();
-    } else {
-      return process.env.MONGODB_URI;
-    }
+  stopServer() {
+    return mongod.stop()
   }
 }

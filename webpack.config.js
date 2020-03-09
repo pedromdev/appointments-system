@@ -1,12 +1,12 @@
-const path = require('path');
-const {DefinePlugin} = require('webpack');
+const path = require('path')
+const { DefinePlugin } = require('webpack')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const SizePlugin = require('size-plugin');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const SizePlugin = require('size-plugin')
+const LiveReloadPlugin = require('webpack-livereload-plugin')
+const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 
 const VENDOR_LIBS = [
   '@sentry/browser',
@@ -18,16 +18,16 @@ const VENDOR_LIBS = [
   'react-dom',
   'react-redux',
   'react-router',
-  'redux',
-];
+  'redux'
+]
 
-const isDevMode = process.env.NODE_ENV === 'development';
+const isDevMode = process.env.NODE_ENV === 'development'
 
 const plugins = [
   new DefinePlugin({
     'process.env': JSON.stringify({
       NODE_ENV: process.env.NODE_ENV,
-      REACT_SENTRY_DSN: process.env.REACT_SENTRY_DSN,
+      REACT_SENTRY_DSN: process.env.REACT_SENTRY_DSN
     })
   }),
   new HtmlWebpackPlugin({ template: './src/client/index.html' }),
@@ -42,15 +42,15 @@ const plugins = [
   // }),
   new MiniCssExtractPlugin({
     filename: 'css/[name].css?version=[contenthash]',
-    chunkFilename: 'css/[name].[id].css?version=[contenthash]',
+    chunkFilename: 'css/[name].[id].css?version=[contenthash]'
   }),
   new SizePlugin()
-];
+]
 
 if (isDevMode) {
-  plugins.push(new LiveReloadPlugin({ appendScriptTag: true }));
+  plugins.push(new LiveReloadPlugin({ appendScriptTag: true }))
 
-  if (process.env.APP_ENV !== 'docker') plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:8080' }));
+  if (process.env.APP_ENV !== 'docker') plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:8080' }))
 }
 
 module.exports = {
@@ -58,7 +58,7 @@ module.exports = {
     bundle: [
       '@babel/polyfill',
       './src/client/index.js'
-    ],
+    ]
   },
   output: {
     path: path.join(__dirname, 'public'),
@@ -69,20 +69,49 @@ module.exports = {
   module: {
     rules: [
       {
-        use: 'babel-loader',
         test: /\.js$/,
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            "presets": [
+              [
+                "@babel/preset-env",
+                {
+                  "targets": {
+                    "browsers": [
+                      "last 2 versions",
+                      "ie >= 11"
+                    ]
+                  }
+                }
+              ],
+              "@babel/preset-react"
+            ],
+            "plugins": [
+              "@babel/plugin-proposal-class-properties",
+              "@babel/plugin-syntax-dynamic-import"
+            ],
+            "env": {
+              "production": {
+                "plugins": [
+                  "transform-react-remove-prop-types"
+                ]
+              }
+            }
+          }
+        }
       },
       {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: isDevMode,
-            },
+              hmr: isDevMode
+            }
           },
           'css-loader',
-          'sass-loader',
+          'sass-loader'
         ],
         test: /\.(sc|sa|c)ss$/
       },
@@ -99,4 +128,4 @@ module.exports = {
     ]
   },
   plugins
-};
+}

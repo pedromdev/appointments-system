@@ -1,10 +1,10 @@
-import {Schema, model} from 'mongoose';
-import Doctor from './Doctor';
+import { Schema, model } from 'mongoose'
+import Doctor from './Doctor'
 
 const ProcedureSchema = new Schema({
   _doctor_id: {
     type: Schema.Types.ObjectId,
-    required: [true, 'É necessário informar o responsável pelo procedimento'],
+    required: [true, 'É necessário informar o responsável pelo procedimento']
   },
   name: {
     type: String,
@@ -19,10 +19,10 @@ const ProcedureSchema = new Schema({
       message: 'A duração do procedimento deve ser um número inteiro em minutos'
     }
   }
-});
+})
 
 ProcedureSchema.methods.getDoctor = async function() {
-  return await Doctor.findById(this._doctor_id);
-};
+  return await Doctor.findById(this._doctor_id)
+}
 
-export default model('Procedure', ProcedureSchema);
+export default model('Procedure', ProcedureSchema)
