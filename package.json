@@ -13,7 +13,7 @@
     "test": "npm run test:server && npm run test:client",
     "test:watch": "concurrently --kill-others \"npm run test:watch:server\" \"npm run test:watch:client\"",
     "test:client": "cross-env NODE_ENV=test jest --config=./jest.client.config.js",
-    "test:server": "cross-env NODE_ENV=test jest --config=./jest.server.config.js",
+    "test:server": "cross-env NODE_ENV=test jest --config=./jest.server.config.js --runInBand",
     "test:watch:client": "cross-var $npm_execpath run test:client -- --watchAll",
     "test:watch:server": "cross-var $npm_execpath run test:server -- --watchAll",
     "docker": "docker-compose up"
@@ -40,6 +40,7 @@
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "bson": "^4.0.3",
     "classnames": "^2.2.6",
     "counterpart": "^0.18.6",
     "dotenv": "^8.2.0",
@@ -49,6 +50,7 @@
     "jsonwebtoken": "^8.5.1",
     "jss": "^10.0.4",
     "jss-rtl": "^0.3.0",
+    "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",
     "moment": "^2.24.0",
     "mongodb": "^3.5.4",
@@ -70,9 +72,10 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
+    "apollo-server-testing": "^2.11.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
