@@ -1,18 +1,9 @@
-import {
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLID,
-  GraphQLString,
-  GraphQLInt
-} from 'graphql'
-
+import { GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql'
 // Types
 import UserType from './queries/UserType'
 import DoctorType from './queries/DoctorType'
 import ProcedureType from './queries/ProcedureType'
 import ScheduleType from './queries/ScheduleType'
-
 // Models
 import User from '../models/User'
 import Doctor from '../models/Doctor'
@@ -26,8 +17,8 @@ const QueryType = new GraphQLObjectType({
   fields: {
     me: {
       type: MeType,
-      resolve(model, query, req) {
-        return req.user
+      resolve(model, query, { user }) {
+        return user
       }
     },
     users: {

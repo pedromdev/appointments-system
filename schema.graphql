@@ -1,0 +1,68 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: QueryType
+}
+
+type DoctorType {
+    id: ID
+    medical_speciality: String
+    procedures(name: String): [ProcedureType]
+    schedules(end: Date, start: Date, status: Status): [ScheduleType]
+    user: UserType
+}
+
+type MeType {
+    doctor: DoctorType
+    email: String
+    id: ID
+    name: String
+    schedules(end: Date, start: Date, status: Status): [ScheduleType]
+}
+
+type ProcedureType {
+    doctor: DoctorType
+    duration: Int
+    id: ID
+    name: String
+    schedules(end: Date, start: Date, status: Status): [ScheduleType]
+}
+
+type QueryType {
+    doctor(id: ID!): DoctorType
+    doctors(medical_speciality: String): [DoctorType]
+    me: MeType
+    procedure(id: ID!): ProcedureType
+    procedures(duration: Int, name: String): [ProcedureType]
+    schedule(id: ID!): ScheduleType
+    schedules(note: String): [ScheduleType]
+    user(id: ID!): UserType
+    users(name: String): [UserType]
+}
+
+type ScheduleType {
+    datetime: Date
+    doctor: DoctorType
+    id: ID
+    note: String
+    procedure: ProcedureType
+    status: String
+    user: UserType
+}
+
+type UserType {
+    doctor: DoctorType
+    id: ID
+    name: String
+    schedules(end: Date, start: Date, status: Status): [ScheduleType]
+}
+
+enum Status {
+    CANCELLED
+    CONFIRMED
+    NEW
+}
+
+
+"Date custom scalar type"
+scalar Date
