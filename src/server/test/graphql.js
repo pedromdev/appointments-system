@@ -7,7 +7,6 @@ import Schedule from '../models/Schedule'
 import { ApolloServer } from 'apollo-server-express'
 import Schema from '../graphql/Schema'
 import Jwt from '../configurations/jwt'
-import * as database from './database'
 
 const saveItemHandler = (Model, items) => {
   return items.map(item => {
@@ -16,7 +15,7 @@ const saveItemHandler = (Model, items) => {
   })
 }
 
-class GraphQLTest {
+export class GraphQLTest {
   #runned = false
   #title
   #user
@@ -124,42 +123,4 @@ class GraphQLTest {
   }
 }
 
-class GraphqlSuiteTest {
-  #title
-  #tests
-  #useDatabase = false
-
-  constructor(title, tests) {
-    this.#title = title
-    this.#tests = tests
-  }
-
-  withDatabase() {
-    this.#useDatabase = true
-    return this
-  }
-
-  run() {
-    describe(`GraphQL | ${this.#title}`, () => {
-      if (this.#useDatabase) {
-        beforeAll(async () => {
-          await database.start()
-        })
-
-        afterAll(async () => {
-          await database.stop()
-        })
-
-        afterEach(async () => {
-          await database.clear()
-        })
-      }
-
-      this.#tests.forEach(test => test.run())
-    })
-    return this
-  }
-}
-
 export const graphqlTest = (title) => new GraphQLTest(title)
-export const graphqlSuiteTest = (title, tests) => new GraphqlSuiteTest(title, tests)
